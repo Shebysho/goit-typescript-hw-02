@@ -1,0 +1,9 @@
+.imageGallery {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 16px;
+    width: 100%;
+    padding: 20px;
+    list-style: none;
+  }
