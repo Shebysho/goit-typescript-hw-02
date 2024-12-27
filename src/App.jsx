@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
-import Modal from 'react-modal';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import Modal from "react-modal";
 
-import SearchBar from './components/SearchBar/SearchBar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import ImageCard from './components/ImageCard/ImageCard';
-import Loader from './components/Loader/Loader';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage';
-import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
-import ImageModal from './components/ImageModal/ImageModal';
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "./components/ImageModal/ImageModal";
 
-import './App.css';
+import "./App.css";
 
 const API_KEY = '-3PovUstEtei64y_hvyPnPb1qPxP8s1goRY9WaztKj4'; 
-const BASE_URL = 'https://api.unsplash.com/search/photos';
+const BASE_URL = "https://api.unsplash.com/search/photos";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 export default function App() {
   const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -50,22 +49,24 @@ export default function App() {
       const newImages = response.data.results;
 
       if (newImages.length === 0) {
-        toast.error('На жаль, нічого не знайдено.');
+        toast.error("На жаль, нічого не знайдено.");
         return;
       }
 
-      setImages(prevImages => (page === 1 ? newImages : [...prevImages, ...newImages]));
+      setImages((prevImages) =>
+        page === 1 ? newImages : [...prevImages, ...newImages],
+      );
     } catch (error) {
       setError(error);
-      toast.error('Помилка завантаження зображень.');
+      toast.error("Помилка завантаження зображень.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSearchSubmit = newQuery => {
-    if (newQuery.trim() === '') {
-      toast.error('Будь ласка, введіть текст для пошуку.');
+  const handleSearchSubmit = (newQuery) => {
+    if (newQuery.trim() === "") {
+      toast.error("Будь ласка, введіть текст для пошуку.");
       return;
     }
 
@@ -75,10 +76,10 @@ export default function App() {
   };
 
   const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
-  const openModal = image => {
+  const openModal = (image) => {
     setSelectedImage(image);
     setShowModal(true);
   };
@@ -100,20 +101,18 @@ export default function App() {
 
       {images.length > 0 && (
         <>
-          <ImageGallery>
-            {images.map(image => (
-              <li key={image.id}>
-                <ImageCard image={image} onClick={() => openModal(image)} />
-              </li>
-            ))}
-          </ImageGallery>
+          <ImageGallery images={images} onClick={openModal} />
 
           {!isLoading && <LoadMoreBtn onClick={handleLoadMore} />}
         </>
       )}
 
       {showModal && (
-        <ImageModal image={selectedImage} onClose={closeModal} />
+        <ImageModal
+          isOpen={showModal}
+          onRequestClose={closeModal}
+          image={selectedImage}
+        />
       )}
     </div>
   );

@@ -1,18 +1,25 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import styles from './SearchBar.module.css';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import styles from "./SearchBar.module.css";
+import toast from "react-hot-toast";
 
 export default function SearchBar({ onSubmit }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (query.trim() === "") {
+      toast.error("Будь ласка, введіть текст для пошуку.");
+      return;
+    }
+
     onSubmit(query);
-    setQuery('');
+    setQuery("");
   };
 
   return (
